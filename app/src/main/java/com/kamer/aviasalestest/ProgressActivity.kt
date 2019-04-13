@@ -14,6 +14,9 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.kamer.aviasalestest.utils.findThirdPointOfTriangle
+import com.kamer.aviasalestest.utils.toLatLng
+import com.kamer.aviasalestest.utils.toPoint
 import kotlinx.android.synthetic.main.activity_progress.*
 import kotlin.math.atan2
 
@@ -143,8 +146,18 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         Path().apply {
             moveTo(from.x, from.y)
             val mid = PointF((from.x + to.x) / 2, (from.y + to.y) / 2)
-            val control1 = findThirdPointOfTriangle(mid, from, CONTROL_POINT_ANGLE, CONTROL_POINT_ANGLE)
-            val control2 = findThirdPointOfTriangle(mid, to, CONTROL_POINT_ANGLE, CONTROL_POINT_ANGLE)
+            val control1 = findThirdPointOfTriangle(
+                mid,
+                from,
+                CONTROL_POINT_ANGLE,
+                CONTROL_POINT_ANGLE
+            )
+            val control2 = findThirdPointOfTriangle(
+                mid,
+                to,
+                CONTROL_POINT_ANGLE,
+                CONTROL_POINT_ANGLE
+            )
             cubicTo(control1.x, control1.y, control2.x, control2.y, to.x, to.y)
         }
 

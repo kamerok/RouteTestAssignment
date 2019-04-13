@@ -1,4 +1,4 @@
-package com.kamer.aviasalestest
+package com.kamer.aviasalestest.utils
 
 import android.graphics.PointF
 import kotlin.math.PI

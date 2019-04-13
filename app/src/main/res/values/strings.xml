@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">AviasalesTest</string>
-    <string name="title_activity_progress">Map</string>
+
+    <string name="main_search">Поиск</string>
 </resources>
