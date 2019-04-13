@@ -25,8 +25,8 @@ import kotlin.math.atan2
 class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
-        private const val EXTRA_FROM = "from"
-        private const val EXTRA_TO = "to"
+        private const val EXTRA_ORIGIN = "origin"
+        private const val EXTRA_DESTINATION = "destination"
         private const val EXTRA_PROGRESS = "progress"
 
         private const val PATH_OFFSET = 100
@@ -34,10 +34,10 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         private const val ANIMATION_DURATION = 30000L
         private val CONTROL_POINT_ANGLE = Math.toRadians(60.0)
 
-        fun intent(context: Context, from: City, to: City): Intent =
+        fun intent(context: Context, origin: City, destination: City): Intent =
             Intent(context, ProgressActivity::class.java).apply {
-                putExtra(EXTRA_FROM, from)
-                putExtra(EXTRA_TO, to)
+                putExtra(EXTRA_ORIGIN, origin)
+                putExtra(EXTRA_DESTINATION, destination)
             }
     }
 
@@ -73,8 +73,8 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private lateinit var from: City
-    private lateinit var to: City
+    private lateinit var origin: City
+    private lateinit var destination: City
     private var startProgress = 0L
 
     private var animation: ValueAnimator? = null
@@ -87,8 +87,8 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
             startProgress = savedInstanceState.getLong(EXTRA_PROGRESS, 0L)
         }
 
-        from = intent.getSerializableExtra(EXTRA_FROM) as City
-        to = intent.getSerializableExtra(EXTRA_TO) as City
+        origin = intent.getSerializableExtra(EXTRA_ORIGIN) as City
+        destination = intent.getSerializableExtra(EXTRA_DESTINATION) as City
 
         (mapFragment as SupportMapFragment).getMapAsync(this)
     }
@@ -113,20 +113,18 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         //sometimes onMapReady called just before layout (e.g. with Don't keep activities enabled)
         Handler().post {
-            initMap(googleMap, from, to)
+            initMap(googleMap, origin, destination)
         }
     }
 
-    private fun initMap(map: GoogleMap, fromAirport: City, toAirport: City) {
-        val from = LatLng(fromAirport.latitude, fromAirport.longitude)
-        val to = LatLng(toAirport.latitude, toAirport.longitude)
+    private fun initMap(map: GoogleMap, origin: City, destination: City) {
+        val originLatLng = LatLng(origin.latitude, origin.longitude)
+        val destinationLatLng = LatLng(destination.latitude, destination.longitude)
 
-        val bounds = LatLngBounds.builder().include(from).include(to).build()
+        val bounds = LatLngBounds.builder().include(originLatLng).include(destinationLatLng).build()
         map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, PATH_OFFSET))
 
-        val fromPoint = from.toPoint()
-        val toPoint = to.toPoint()
-        val path = calculatePath(fromPoint, toPoint)
+        val path = calculatePath(originLatLng.toPoint(), destinationLatLng.toPoint())
 
         map.addPolyline(
             PolylineOptions()
@@ -135,10 +133,10 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
                 .color(pathColor)
         )
 
-        map.addMarker(MarkerOptions().position(from).anchor(0.5f, 0.5f).icon(drawMarkerIcon(fromAirport.iata)))
-        map.addMarker(MarkerOptions().position(to).anchor(0.5f, 0.5f).icon(drawMarkerIcon(toAirport.iata)))
+        map.addMarker(MarkerOptions().position(originLatLng).anchor(0.5f, 0.5f).icon(drawMarkerIcon(origin.iata)))
+        map.addMarker(MarkerOptions().position(destinationLatLng).anchor(0.5f, 0.5f).icon(drawMarkerIcon(destination.iata)))
 
-        val plane = map.addMarker(MarkerOptions().position(from).zIndex(1f).anchor(0.5f, 0.5f))
+        val plane = map.addMarker(MarkerOptions().position(originLatLng).zIndex(1f).anchor(0.5f, 0.5f))
 
         animateMovement(plane, path)
     }

@@ -16,10 +16,10 @@ class MainViewModel(
             storage.getDestination(),
             BiFunction { origin, destination ->
                 MainUiModel(
-                    fromName = origin.name,
-                    fromIata = origin.iata,
-                    toName = destination.name,
-                    toIata = destination.iata
+                    originName = origin.name,
+                    originIata = origin.iata,
+                    destinationName = destination.name,
+                    destinationIata = destination.iata
                 )
             }
         )
@@ -27,8 +27,8 @@ class MainViewModel(
     fun postEvent(event: MainEvent) {
         when(event) {
             Search -> router.showProgress(storage.getOrigin().blockingFirst(), storage.getDestination().blockingFirst())
-            SelectOrigin -> router.showSelectCity(true)
-            SelectDestination -> router.showSelectCity(false)
+            SelectOrigin -> router.showSelectCity(isOrigin = true)
+            SelectDestination -> router.showSelectCity(isOrigin = false)
         }
     }
 }

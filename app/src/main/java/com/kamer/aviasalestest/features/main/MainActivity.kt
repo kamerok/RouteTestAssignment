@@ -39,14 +39,14 @@ class MainActivity : AppCompatActivity(), MainRouter {
         startActivity(ProgressActivity.intent(this, origin, destination))
     }
 
-    override fun showSelectCity(isSource: Boolean) {
+    override fun showSelectCity(isOrigin: Boolean) {
         TODO("not implemented")
     }
 
     private fun updateViews(state: MainUiModel) {
-        originNameView.text = state.fromName
-        originIataView.text = state.fromIata
-        destinationNameView.text = state.toName
-        destinationIataView.text = state.toIata
+        originNameView.text = state.originName
+        originIataView.text = state.originIata
+        destinationNameView.text = state.destinationName
+        destinationIataView.text = state.destinationIata
     }
 }

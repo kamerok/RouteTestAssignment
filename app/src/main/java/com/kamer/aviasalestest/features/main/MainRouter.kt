@@ -7,6 +7,6 @@ interface MainRouter {
 
     fun showProgress(origin: City, destination: City)
 
-    fun showSelectCity(isSource: Boolean)
+    fun showSelectCity(isOrigin: Boolean)
 
 }
