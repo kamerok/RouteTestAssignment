@@ -6,6 +6,7 @@ import android.util.Log
 import com.kamer.aviasalestest.features.progress.ProgressActivity
 import com.kamer.aviasalestest.R
 import com.kamer.aviasalestest.dependency.ServiceLocator
+import com.kamer.aviasalestest.features.select.SelectCityActivity
 import com.kamer.aviasalestest.model.City
 import com.kamer.aviasalestest.utils.setupRx
 import io.reactivex.rxkotlin.addTo
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity(), MainRouter {
     }
 
     override fun showSelectCity(isOrigin: Boolean) {
-        TODO("not implemented")
+        startActivity(SelectCityActivity.intent(this, isOrigin))
     }
 
     private fun updateViews(state: MainUiModel) {
