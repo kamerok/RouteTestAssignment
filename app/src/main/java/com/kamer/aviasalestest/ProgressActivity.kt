@@ -20,32 +20,50 @@ import kotlin.math.atan2
 class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
+        private const val EXTRA_FROM = "from"
+        private const val EXTRA_TO = "to"
+
         private const val PATH_OFFSET = 100
-        private const val ANIMATION_DURATION = 30000L
+        private const val ANIMATION_DURATION = 10000L
         private val CONTROL_POINT_ANGLE = Math.toRadians(60.0)
 
-        fun intent(context: Context): Intent = Intent(context, ProgressActivity::class.java)
+        fun intent(context: Context, from: AirportPoint, to: AirportPoint): Intent =
+            Intent(context, ProgressActivity::class.java).apply {
+                putExtra(EXTRA_FROM, from)
+                putExtra(EXTRA_TO, to)
+            }
     }
 
     private val planeIcon by lazy { BitmapFactory.decodeResource(resources, R.drawable.ic_plane) }
 
-    private val sydney = LatLng(-34.0, 151.0)
-    private val moscow = LatLng(55.752041, 37.617508)
-    private val newYork = LatLng(40.75603, -73.986956)
+    private lateinit var from: AirportPoint
+    private lateinit var to: AirportPoint
 
+    private var animation: Animator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_progress)
 
+        from = intent.getSerializableExtra(EXTRA_FROM) as AirportPoint
+        to = intent.getSerializableExtra(EXTRA_TO) as AirportPoint
+
         (mapFragment as SupportMapFragment).getMapAsync(this)
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        initPath(googleMap, moscow, newYork)
+    override fun onDestroy() {
+        super.onDestroy()
+        animation?.run {
+            removeAllListeners()
+            cancel()
+        }
     }
 
-    private fun initPath(map: GoogleMap, from: LatLng, to: LatLng) {
+    override fun onMapReady(googleMap: GoogleMap) {
+        initMap(googleMap, LatLng(from.latitude, from.longitude), LatLng(to.latitude, to.longitude))
+    }
+
+    private fun initMap(map: GoogleMap, from: LatLng, to: LatLng) {
         map.addMarker(MarkerOptions().position(from))
         map.addMarker(MarkerOptions().position(to))
 
@@ -108,6 +126,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
         })
+        animation = animator
         animator.start()
     }
 
