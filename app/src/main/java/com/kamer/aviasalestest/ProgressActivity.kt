@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.*
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -25,7 +26,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         private const val EXTRA_PROGRESS = "progress"
 
         private const val PATH_OFFSET = 100
-        private const val ANIMATION_DURATION = 10000L
+        private const val ANIMATION_DURATION = 30000L
         private val CONTROL_POINT_ANGLE = Math.toRadians(60.0)
 
         fun intent(context: Context, from: AirportPoint, to: AirportPoint): Intent =
@@ -75,7 +76,10 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        initMap(googleMap, LatLng(from.latitude, from.longitude), LatLng(to.latitude, to.longitude))
+        //sometimes onMapReady called just before layout (e.g. with Don't keep activities enabled)
+        Handler().post {
+            initMap(googleMap, LatLng(from.latitude, from.longitude), LatLng(to.latitude, to.longitude))
+        }
     }
 
     private fun initMap(map: GoogleMap, from: LatLng, to: LatLng) {
