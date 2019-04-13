@@ -22,6 +22,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
         private const val EXTRA_FROM = "from"
         private const val EXTRA_TO = "to"
+        private const val EXTRA_PROGRESS = "progress"
 
         private const val PATH_OFFSET = 100
         private const val ANIMATION_DURATION = 10000L
@@ -38,17 +39,31 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var from: AirportPoint
     private lateinit var to: AirportPoint
+    private var startProgress = 0L
 
-    private var animation: Animator? = null
+    private var animation: ValueAnimator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_progress)
 
+        if (savedInstanceState != null) {
+            startProgress = savedInstanceState.getLong(EXTRA_PROGRESS, 0L)
+        }
+
         from = intent.getSerializableExtra(EXTRA_FROM) as AirportPoint
         to = intent.getSerializableExtra(EXTRA_TO) as AirportPoint
 
         (mapFragment as SupportMapFragment).getMapAsync(this)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        animation?.let {
+            if (it.isRunning) {
+                outState.putLong(EXTRA_PROGRESS, it.currentPlayTime)
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -117,6 +132,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         val pathMeasure = PathMeasure(path, false)
         val animator = ValueAnimator.ofFloat(0f, 1f)
         animator.duration = ANIMATION_DURATION
+        animator.currentPlayTime = startProgress
         animator.addUpdateListener {
             movePlane(it.animatedValue as Float, pathMeasure, plane)
         }
