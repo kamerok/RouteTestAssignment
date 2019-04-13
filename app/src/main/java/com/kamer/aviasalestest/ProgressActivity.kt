@@ -122,7 +122,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         pathMeasure.getPosTan(0f, start, null)
         pathMeasure.getPosTan(pathMeasure.length, end, null)
         var t = 0f
-        while (t <= 1.0) {
+        while (t < 1.0 || Math.abs(1.0 - t) < 0.0001f) {
             val point = FloatArray(2)
             pathMeasure.getPosTan(pathMeasure.length * t, point, null)
             result.add(PointF(point[0], point[1]).toLatLng())
