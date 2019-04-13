@@ -83,23 +83,26 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun initMap(map: GoogleMap, from: LatLng, to: LatLng) {
-        map.addMarker(MarkerOptions().position(from))
-        map.addMarker(MarkerOptions().position(to))
 
         val bounds = LatLngBounds.builder().include(from).include(to).build()
         map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, PATH_OFFSET))
 
-        val plane = map.addMarker(MarkerOptions().position(from).anchor(0.5f, 0.5f))
         val fromPoint = from.toPoint()
         val toPoint = to.toPoint()
-
         val path = calculatePath(fromPoint, toPoint)
+
         map.addPolyline(
             PolylineOptions()
                 .addAll(createPoints(path))
-                .width(5f)
+                .pattern(listOf(Dot(), Gap(20f)))
                 .color(Color.RED)
         )
+
+        map.addMarker(MarkerOptions().position(from))
+        map.addMarker(MarkerOptions().position(to))
+
+        val plane = map.addMarker(MarkerOptions().position(from).anchor(0.5f, 0.5f))
+
         animateMovement(plane, path)
     }
 
