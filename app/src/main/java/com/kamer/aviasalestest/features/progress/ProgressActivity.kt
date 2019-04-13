@@ -1,4 +1,4 @@
-package com.kamer.aviasalestest
+package com.kamer.aviasalestest.features.progress
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -14,6 +14,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.kamer.aviasalestest.R
 import com.kamer.aviasalestest.model.City
 import com.kamer.aviasalestest.utils.findThirdPointOfTriangle
 import com.kamer.aviasalestest.utils.toLatLng
@@ -122,7 +123,9 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         val destinationLatLng = LatLng(destination.latitude, destination.longitude)
 
         val bounds = LatLngBounds.builder().include(originLatLng).include(destinationLatLng).build()
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, PATH_OFFSET))
+        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,
+            PATH_OFFSET
+        ))
 
         val path = calculatePath(originLatLng.toPoint(), destinationLatLng.toPoint())
 

@@ -3,7 +3,7 @@ package com.kamer.aviasalestest.features.main
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.kamer.aviasalestest.ProgressActivity
+import com.kamer.aviasalestest.features.progress.ProgressActivity
 import com.kamer.aviasalestest.R
 import com.kamer.aviasalestest.dependency.ServiceLocator
 import com.kamer.aviasalestest.model.City
