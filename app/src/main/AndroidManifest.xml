@@ -18,7 +18,7 @@
 
         <activity android:name=".ProgressActivity">
         </activity>
-        <activity android:name=".main.MainActivity">
+        <activity android:name="com.kamer.aviasalestest.features.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -1,4 +1,4 @@
-package com.kamer.aviasalestest.main
+package com.kamer.aviasalestest.features.main
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -6,7 +6,7 @@ import android.util.Log
 import com.kamer.aviasalestest.AirportPoint
 import com.kamer.aviasalestest.ProgressActivity
 import com.kamer.aviasalestest.R
-import com.kamer.aviasalestest.data.SelectedCityStorage
+import com.kamer.aviasalestest.dependency.ServiceLocator
 import com.kamer.aviasalestest.model.City
 import com.kamer.aviasalestest.utils.setupRx
 import io.reactivex.rxkotlin.addTo
@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), MainRouter {
 
-    private val viewModel: MainViewModel = MainViewModel(SelectedCityStorage(), this)
+    private val viewModel: MainViewModel by lazy { ServiceLocator.buildMainViewModel(this) }
 
     init {
         setupRx { compositeDisposable ->

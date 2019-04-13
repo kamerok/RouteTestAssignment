@@ -1,4 +1,4 @@
-package com.kamer.aviasalestest.main
+package com.kamer.aviasalestest.features.main
 
 import com.kamer.aviasalestest.model.City
 
