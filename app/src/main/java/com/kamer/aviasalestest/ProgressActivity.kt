@@ -14,6 +14,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.kamer.aviasalestest.model.City
 import com.kamer.aviasalestest.utils.findThirdPointOfTriangle
 import com.kamer.aviasalestest.utils.toLatLng
 import com.kamer.aviasalestest.utils.toPoint
@@ -33,7 +34,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         private const val ANIMATION_DURATION = 30000L
         private val CONTROL_POINT_ANGLE = Math.toRadians(60.0)
 
-        fun intent(context: Context, from: AirportPoint, to: AirportPoint): Intent =
+        fun intent(context: Context, from: City, to: City): Intent =
             Intent(context, ProgressActivity::class.java).apply {
                 putExtra(EXTRA_FROM, from)
                 putExtra(EXTRA_TO, to)
@@ -72,8 +73,8 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private lateinit var from: AirportPoint
-    private lateinit var to: AirportPoint
+    private lateinit var from: City
+    private lateinit var to: City
     private var startProgress = 0L
 
     private var animation: ValueAnimator? = null
@@ -86,8 +87,8 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
             startProgress = savedInstanceState.getLong(EXTRA_PROGRESS, 0L)
         }
 
-        from = intent.getSerializableExtra(EXTRA_FROM) as AirportPoint
-        to = intent.getSerializableExtra(EXTRA_TO) as AirportPoint
+        from = intent.getSerializableExtra(EXTRA_FROM) as City
+        to = intent.getSerializableExtra(EXTRA_TO) as City
 
         (mapFragment as SupportMapFragment).getMapAsync(this)
     }
@@ -116,7 +117,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun initMap(map: GoogleMap, fromAirport: AirportPoint, toAirport: AirportPoint) {
+    private fun initMap(map: GoogleMap, fromAirport: City, toAirport: City) {
         val from = LatLng(fromAirport.latitude, fromAirport.longitude)
         val to = LatLng(toAirport.latitude, toAirport.longitude)
 
@@ -134,8 +135,8 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
                 .color(pathColor)
         )
 
-        map.addMarker(MarkerOptions().position(from).anchor(0.5f, 0.5f).icon(drawMarkerIcon(fromAirport.shortName)))
-        map.addMarker(MarkerOptions().position(to).anchor(0.5f, 0.5f).icon(drawMarkerIcon(toAirport.shortName)))
+        map.addMarker(MarkerOptions().position(from).anchor(0.5f, 0.5f).icon(drawMarkerIcon(fromAirport.iata)))
+        map.addMarker(MarkerOptions().position(to).anchor(0.5f, 0.5f).icon(drawMarkerIcon(toAirport.iata)))
 
         val plane = map.addMarker(MarkerOptions().position(from).zIndex(1f).anchor(0.5f, 0.5f))
 

@@ -1,5 +1,7 @@
 package com.kamer.aviasalestest.model
 
+import java.io.Serializable
+
 
 data class City(
     val id: Long,
@@ -7,4 +9,4 @@ data class City(
     val iata: String,
     val latitude: Double,
     val longitude: Double
-)
+) : Serializable

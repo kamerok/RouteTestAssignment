@@ -3,7 +3,6 @@ package com.kamer.aviasalestest.features.main
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.kamer.aviasalestest.AirportPoint
 import com.kamer.aviasalestest.ProgressActivity
 import com.kamer.aviasalestest.R
 import com.kamer.aviasalestest.dependency.ServiceLocator
@@ -37,13 +36,7 @@ class MainActivity : AppCompatActivity(), MainRouter {
     }
 
     override fun showProgress(origin: City, destination: City) {
-        startActivity(
-            ProgressActivity.intent(
-                this,
-                AirportPoint(origin.iata, origin.latitude, origin.longitude),
-                AirportPoint(destination.iata, destination.latitude, destination.longitude)
-            )
-        )
+        startActivity(ProgressActivity.intent(this, origin, destination))
     }
 
     override fun showSelectCity(isSource: Boolean) {
