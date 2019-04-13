@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="marker_text">18sp</dimen>
+    <dimen name="marker_border">1dp</dimen>
+    <dimen name="marker_horizontal_padding">12dp</dimen>
+    <dimen name="marker_vertical_padding">6dp</dimen>
+
+</resources>

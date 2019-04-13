@@ -11,9 +11,5 @@
             android:layout_height="match_parent"
             android:id="@+id/mapFragment"
             tools:context=".ProgressActivity"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            map:uiRotateGestures="false"
-            map:uiScrollGestures="false"
-            map:uiTiltGestures="false"
-            map:uiZoomGestures="false"/>
+            android:name="com.google.android.gms.maps.SupportMapFragment"/>
 </FrameLayout>

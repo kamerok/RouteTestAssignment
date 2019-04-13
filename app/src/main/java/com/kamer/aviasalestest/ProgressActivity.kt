@@ -26,6 +26,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         private const val EXTRA_PROGRESS = "progress"
 
         private const val PATH_OFFSET = 100
+        private const val PATH_POINTS = 50
         private const val ANIMATION_DURATION = 30000L
         private val CONTROL_POINT_ANGLE = Math.toRadians(60.0)
 
@@ -36,7 +37,37 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
             }
     }
 
+    private val pathColor: Int = Color.BLUE
+
+    private val markerTextSize by lazy { resources.getDimension(R.dimen.marker_text) }
+    private val markerVerticalPadding by lazy { resources.getDimension(R.dimen.marker_vertical_padding) }
+    private val markerHorizontalPadding by lazy { resources.getDimension(R.dimen.marker_horizontal_padding) }
+    private val markerBorder by lazy { resources.getDimension(R.dimen.marker_border) }
+
     private val planeIcon by lazy { BitmapFactory.decodeResource(resources, R.drawable.ic_plane) }
+    private val markerFillPaint by lazy {
+        Paint().apply {
+            color = Color.WHITE
+            style = Paint.Style.FILL
+            isAntiAlias = true
+        }
+    }
+    private val markerStrokePaint by lazy {
+        Paint().apply {
+            color = pathColor
+            style = Paint.Style.STROKE
+            strokeWidth = markerBorder
+            isAntiAlias = true
+        }
+    }
+    private val markerTextPaint by lazy {
+        Paint().apply {
+            color = pathColor
+            textSize = markerTextSize
+            textAlign = Paint.Align.CENTER
+            isAntiAlias = true
+        }
+    }
 
     private lateinit var from: AirportPoint
     private lateinit var to: AirportPoint
@@ -78,11 +109,13 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         //sometimes onMapReady called just before layout (e.g. with Don't keep activities enabled)
         Handler().post {
-            initMap(googleMap, LatLng(from.latitude, from.longitude), LatLng(to.latitude, to.longitude))
+            initMap(googleMap, from, to)
         }
     }
 
-    private fun initMap(map: GoogleMap, from: LatLng, to: LatLng) {
+    private fun initMap(map: GoogleMap, fromAirport: AirportPoint, toAirport: AirportPoint) {
+        val from = LatLng(fromAirport.latitude, fromAirport.longitude)
+        val to = LatLng(toAirport.latitude, toAirport.longitude)
 
         val bounds = LatLngBounds.builder().include(from).include(to).build()
         map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, PATH_OFFSET))
@@ -95,13 +128,13 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
             PolylineOptions()
                 .addAll(createPoints(path))
                 .pattern(listOf(Dot(), Gap(20f)))
-                .color(Color.RED)
+                .color(pathColor)
         )
 
-        map.addMarker(MarkerOptions().position(from))
-        map.addMarker(MarkerOptions().position(to))
+        map.addMarker(MarkerOptions().position(from).anchor(0.5f, 0.5f).icon(drawMarkerIcon(fromAirport.shortName)))
+        map.addMarker(MarkerOptions().position(to).anchor(0.5f, 0.5f).icon(drawMarkerIcon(toAirport.shortName)))
 
-        val plane = map.addMarker(MarkerOptions().position(from).anchor(0.5f, 0.5f))
+        val plane = map.addMarker(MarkerOptions().position(from).zIndex(1f).anchor(0.5f, 0.5f))
 
         animateMovement(plane, path)
     }
@@ -118,7 +151,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun createPoints(path: Path): List<LatLng> {
         val result = mutableListOf<LatLng>()
 
-        val tDelta = 1f / 20
+        val tDelta = 1f / PATH_POINTS
         val pathMeasure = PathMeasure(path, false)
         val start = FloatArray(2)
         val end = FloatArray(2)
@@ -135,6 +168,24 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         return result
     }
 
+    private fun drawMarkerIcon(text: String): BitmapDescriptor {
+        val width = markerTextPaint.measureText(text) + 2 * (markerBorder + markerHorizontalPadding)
+        val height = markerTextPaint.textSize + 2 * (markerBorder + markerVerticalPadding)
+        val bitmap = Bitmap.createBitmap(width.toInt(), height.toInt(), Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        canvas.drawRoundRect(0f, 0f, width, height, height, height, markerFillPaint)
+        val borderRadius = markerBorder / 2
+        canvas.drawRoundRect(
+            borderRadius, borderRadius,
+            width - borderRadius, height - borderRadius,
+            height, height,
+            markerStrokePaint
+        )
+        val yPos = (height / 2 - (markerTextPaint.descent() + markerTextPaint.ascent()) / 2)
+        canvas.drawText(text, width / 2, yPos, markerTextPaint)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
+
     private fun animateMovement(plane: Marker, path: Path) {
         val pathMeasure = PathMeasure(path, false)
         val animator = ValueAnimator.ofFloat(0f, 1f)
@@ -147,7 +198,6 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun onAnimationEnd(animation: Animator?) {
                 finish()
             }
-
         })
         animation = animator
         animator.start()
