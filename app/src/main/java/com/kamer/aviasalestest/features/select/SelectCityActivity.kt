@@ -52,9 +52,17 @@ class SelectCityActivity : AppCompatActivity(), TextWatcher, SelectCityRouter {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_city)
 
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
         queryView.addTextChangedListener(this)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return false
     }
 
     override fun afterTextChanged(s: Editable?) {}
