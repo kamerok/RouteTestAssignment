@@ -39,17 +39,16 @@ class ServiceLocator(
 
     fun buildMainViewModel(router: MainRouter) = MainViewModel(selectedCityStorage, router)
 
-    fun buildSelectCityViewModel(isOrigin: Boolean) =
+    fun buildSelectCityViewModel(isOrigin: Boolean, router: SelectCityRouter) =
         SelectCityViewModel(
             isOrigin,
             buildSelectCityInteractor(),
-            buildSelectCityRouter(),
+            router,
             buildStringProvider()
         )
 
     private fun buildSelectCityInteractor() = SelectCityInteractor(selectedCityStorage, searchCityRepository)
 
-    private fun buildSelectCityRouter() = SelectCityRouter()
 
     private fun buildStringProvider(): StringProvider = StringProvider(appContext)
 

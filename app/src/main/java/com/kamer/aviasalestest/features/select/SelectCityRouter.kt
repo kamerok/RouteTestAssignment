@@ -1,10 +1,8 @@
 package com.kamer.aviasalestest.features.select
 
 
-class SelectCityRouter {
+interface SelectCityRouter {
 
-    fun closeScreen() {
-
-    }
+    fun closeScreen()
 
 }

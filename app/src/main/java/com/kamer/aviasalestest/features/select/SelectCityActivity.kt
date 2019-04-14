@@ -15,7 +15,7 @@ import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_select_city.*
 
 
-class SelectCityActivity : AppCompatActivity(), TextWatcher {
+class SelectCityActivity : AppCompatActivity(), TextWatcher, SelectCityRouter {
 
     companion object {
         private const val EXTRA_IS_ORIGIN = "is_origin"
@@ -28,7 +28,10 @@ class SelectCityActivity : AppCompatActivity(), TextWatcher {
     }
 
     private val viewModel: SelectCityViewModel by lazy {
-        App.serviceLocator.buildSelectCityViewModel(intent.getBooleanExtra(EXTRA_IS_ORIGIN, true))
+        App.serviceLocator.buildSelectCityViewModel(
+            isOrigin = intent.getBooleanExtra(EXTRA_IS_ORIGIN, true),
+            router = this
+        )
     }
     private val adapter: SelectCityAdapter by lazy {
         SelectCityAdapter { city -> viewModel.postEvent(CitySelected(city)) }
@@ -60,6 +63,10 @@ class SelectCityActivity : AppCompatActivity(), TextWatcher {
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         viewModel.postEvent(QueryChanged(queryView.text.toString().trim()))
+    }
+
+    override fun closeScreen() {
+        finish()
     }
 
     private fun updateViews(state: SelectCityUiModel) {

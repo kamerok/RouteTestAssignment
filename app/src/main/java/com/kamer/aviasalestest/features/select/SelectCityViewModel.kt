@@ -69,7 +69,6 @@ class SelectCityViewModel(
     private fun initialState() =
         SelectCityUiModel(
             hint = stringProvider.provide(if (isOrigin) R.string.select_title_origin else R.string.select_title_destination),
-//            query = "",
             items = listOf(MessageItem(stringProvider.provide(R.string.select_prompt)))
         )
 
