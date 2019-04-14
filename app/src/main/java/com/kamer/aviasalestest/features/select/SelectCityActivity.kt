@@ -39,7 +39,7 @@ class SelectCityActivity : AppCompatActivity(), TextWatcher {
             viewModel.state
                 .subscribe(
                     { state -> updateViews(state) },
-                    { Log.e("Main", "error", it) }
+                    { Log.e("SelectCity", "error", it) }
                 )
                 .addTo(compositeDisposable)
         }
@@ -64,7 +64,6 @@ class SelectCityActivity : AppCompatActivity(), TextWatcher {
 
     private fun updateViews(state: SelectCityUiModel) {
         queryView.hint = state.hint
-//        queryView.setText(state.query)
         adapter.setData(state.items)
     }
 

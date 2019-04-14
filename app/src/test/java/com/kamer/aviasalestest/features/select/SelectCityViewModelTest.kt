@@ -10,7 +10,6 @@ import io.reactivex.subjects.PublishSubject
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.Mockito.verify
-import java.lang.Exception
 
 class SelectCityViewModelTest {
 
@@ -37,13 +36,6 @@ class SelectCityViewModelTest {
 
         assertThat(getState().hint).isEqualTo(stringProvider.assert(R.string.select_title_destination))
     }
-
-    /*@Test
-    fun `Empty query on start`() {
-        buildViewModel()
-
-        assertThat(getState().query).isEmpty()
-    }*/
 
     @Test
     fun `Show search prompt on start`() {
