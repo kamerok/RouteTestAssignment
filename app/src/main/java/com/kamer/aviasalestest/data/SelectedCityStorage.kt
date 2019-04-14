@@ -43,7 +43,7 @@ class SelectedCityStorage(
         val origin = getOriginInternal()
         //in real project this logic should be in domain logic layer
         if (origin.id == city.id) {
-            setOrigin(currentDestination)
+            setOriginInternal(currentDestination)
         }
         setDestinationInternal(city)
     }
