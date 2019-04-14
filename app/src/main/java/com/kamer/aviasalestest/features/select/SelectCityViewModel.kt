@@ -19,18 +19,27 @@ class SelectCityViewModel(
     private val inputStream: Subject<SelectCityEvent> = PublishSubject.create()
 
     private val inputTransformer: ObservableTransformer<SelectCityEvent, Action> = ObservableTransformer { upstream ->
-        upstream.ofType(QueryChanged::class.java)
-            .switchMap { event ->
-                if (event.query.isEmpty()) {
-                    Observable.just(QueryCleared)
-                } else {
-                    interactor.findCities(event.query)
-                        .map<Action> { LoadingSuccess(it) }
-                        .onErrorReturn { LoadingError }
+        Observable.merge(
+            upstream.ofType(QueryChanged::class.java)
+                .switchMap { event ->
+                    if (event.query.isEmpty()) {
+                        Observable.just(QueryCleared)
+                    } else {
+                        interactor.findCities(event.query)
+                            .map<Action> { LoadingSuccess(it) }
+                            .onErrorReturn { LoadingError }
+                            .toObservable()
+                            .startWith(LoadingStarted)
+                    }
+                },
+            upstream.ofType(CitySelected::class.java)
+                .flatMap<Action> { event ->
+                    interactor.selectCity(event.city, isOrigin)
+                        .onErrorComplete()
+                        .doOnComplete { router.closeScreen() }
                         .toObservable()
-                        .startWith(LoadingStarted)
                 }
-            }
+        )
     }
 
     val state: Observable<SelectCityUiModel> by lazy {

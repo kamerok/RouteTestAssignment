@@ -3,10 +3,8 @@ package com.kamer.aviasalestest.features.select
 import com.kamer.aviasalestest.R
 import com.kamer.aviasalestest.model.City
 import com.kamer.aviasalestest.utils.StringProvider
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.atLeastOnce
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
+import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import org.assertj.core.api.Assertions.assertThat
@@ -136,6 +134,52 @@ class SelectCityViewModelTest {
         viewModel.postEvent(QueryChanged(""))
 
         assertThat(getState().items).containsOnly(MessageItem(stringProvider.assert(R.string.select_prompt)))
+    }
+
+    @Test
+    fun `Save new origin city on city selected`() {
+        whenever(interactor.findCities(any())).then { Single.just(listOf(city(0))) }
+
+        buildViewModel(true)
+        viewModel.postEvent(QueryChanged("query"))
+        viewModel.postEvent(CitySelected(city(0)))
+
+        verify(interactor).selectCity(city(0), true)
+    }
+
+    @Test
+    fun `Save new destination city on city selected`() {
+        whenever(interactor.findCities(any())).then { Single.just(listOf(city(0))) }
+
+        buildViewModel(false)
+        viewModel.postEvent(QueryChanged("query"))
+        viewModel.postEvent(CitySelected(city(0)))
+
+        verify(interactor).selectCity(city(0), false)
+    }
+
+    @Test
+    fun `Wait for city selection before close`() {
+        whenever(interactor.findCities(any())).then { Single.just(listOf(city(0))) }
+        whenever(interactor.selectCity(any(), any())).then { Completable.never() }
+
+        buildViewModel(false)
+        viewModel.postEvent(QueryChanged("query"))
+        viewModel.postEvent(CitySelected(city(0)))
+
+        verify(router, never()).closeScreen()
+    }
+
+    @Test
+    fun `Close screen on city selected`() {
+        whenever(interactor.findCities(any())).then { Single.just(listOf(city(0))) }
+        whenever(interactor.selectCity(any(), any())).then { Completable.complete() }
+
+        buildViewModel(false)
+        viewModel.postEvent(QueryChanged("query"))
+        viewModel.postEvent(CitySelected(city(0)))
+
+        verify(router).closeScreen()
     }
 
     private fun buildViewModel(isOrigin: Boolean = true) {
