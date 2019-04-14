@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import com.kamer.aviasalestest.R
 import com.kamer.aviasalestest.dependency.ServiceLocator
@@ -13,7 +15,7 @@ import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_select_city.*
 
 
-class SelectCityActivity : AppCompatActivity() {
+class SelectCityActivity : AppCompatActivity(), TextWatcher {
 
     companion object {
         private const val EXTRA_IS_ORIGIN = "is_origin"
@@ -52,6 +54,15 @@ class SelectCityActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+        queryView.addTextChangedListener(this)
+    }
+
+    override fun afterTextChanged(s: Editable?) {}
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        viewModel.postEvent(QueryChanged(queryView.text.toString()))
     }
 
     private fun updateViews(state: SelectCityUiModel) {
