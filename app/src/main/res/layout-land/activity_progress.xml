@@ -9,9 +9,9 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        map:layout_constraintTop_toTopOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintDimensionRatio="1:1"
         tools:context=".features.progress.ProgressActivity" />
 </android.support.constraint.ConstraintLayout>
