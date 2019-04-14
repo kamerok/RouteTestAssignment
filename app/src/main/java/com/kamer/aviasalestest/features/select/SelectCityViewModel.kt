@@ -1,24 +1,23 @@
 package com.kamer.aviasalestest.features.select
 
+import com.kamer.aviasalestest.R
 import com.kamer.aviasalestest.model.City
+import com.kamer.aviasalestest.utils.StringProvider
 import io.reactivex.Observable
 
 
 class SelectCityViewModel(
-    isOrigin: Boolean
+    isOrigin: Boolean,
+    interactor: SelectCityInteractor,
+    router: SelectCityRouter,
+    stringProvider: StringProvider
 ) {
 
     val state: Observable<SelectCityUiModel> = Observable.just(
         SelectCityUiModel(
-            hint = "isOrigin $isOrigin",
+            hint = stringProvider.provide(if (isOrigin) R.string.select_title_origin else R.string.select_title_destination),
             query = "",
-            items = listOf(
-                CityItem(City(0, "Sydney", "SYD", -34.0, 151.0)),
-                CityItem(City(1, "Москва", "MOW", 55.752041, 37.617508)),
-                CityItem(City(2, "Нью-Йорк", "NYC", 40.75603, -73.986956)),
-                MessageItem("Test message"),
-                LoadingItem
-            )
+            items = listOf(MessageItem(stringProvider.provide(R.string.select_empty)))
         )
     )
 

@@ -27,6 +27,7 @@ class SelectCityActivity : AppCompatActivity() {
 
     private val viewModel: SelectCityViewModel by lazy {
         ServiceLocator.buildSelectCityViewModel(
+            this,
             intent.getBooleanExtra(EXTRA_IS_ORIGIN, true)
         )
     }
