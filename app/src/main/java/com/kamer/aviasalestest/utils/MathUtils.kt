@@ -1,6 +1,7 @@
 package com.kamer.aviasalestest.utils
 
 import android.graphics.PointF
+import java.lang.Math.pow
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -23,3 +24,5 @@ fun findThirdPointOfTriangle(pointA: PointF, pointB: PointF, angleA: Double, ang
     val y3 = (1 / (a3 * a3)) * (v * RHS1 + u * RHS2)
     return PointF(x3.toFloat(), y3.toFloat())
 }
+
+fun PointF.lengthTo(point: PointF): Float = sqrt(pow(x.toDouble() - point.x, 2.0) + pow(y.toDouble() - point.y, 2.0)).toFloat()

@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.*
 import com.kamer.aviasalestest.R
 import com.kamer.aviasalestest.model.City
 import com.kamer.aviasalestest.utils.findThirdPointOfTriangle
+import com.kamer.aviasalestest.utils.lengthTo
 import com.kamer.aviasalestest.utils.toLatLng
 import com.kamer.aviasalestest.utils.toPoint
 import kotlinx.android.synthetic.main.activity_progress.*
@@ -124,11 +125,16 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         val destinationLatLng = LatLng(destination.latitude, destination.longitude)
 
         val bounds = LatLngBounds.builder().include(originLatLng).include(destinationLatLng).build()
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,
-            PATH_OFFSET
-        ))
+        map.moveCamera(
+            CameraUpdateFactory.newLatLngBounds(
+                bounds,
+                PATH_OFFSET
+            )
+        )
 
-        val path = calculatePath(originLatLng.toPoint(), destinationLatLng.toPoint())
+        val originPoint = originLatLng.toPoint()
+        val destinationPoint = destinationLatLng.toPoint()
+        val path = calculatePath(originPoint, findClosestToPoint(originPoint, destinationPoint))
 
         map.addPolyline(
             PolylineOptions()
@@ -138,11 +144,31 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         )
 
         map.addMarker(MarkerOptions().position(originLatLng).anchor(0.5f, 0.5f).icon(drawMarkerIcon(origin.iata)))
-        map.addMarker(MarkerOptions().position(destinationLatLng).anchor(0.5f, 0.5f).icon(drawMarkerIcon(destination.iata)))
+        map.addMarker(
+            MarkerOptions().position(destinationLatLng).anchor(
+                0.5f,
+                0.5f
+            ).icon(drawMarkerIcon(destination.iata))
+        )
 
         val plane = map.addMarker(MarkerOptions().position(originLatLng).zIndex(1f).anchor(0.5f, 0.5f))
 
         animateMovement(plane, path)
+    }
+
+    private fun findClosestToPoint(from: PointF, to: PointF): PointF {
+        val isAlternativeInNextSegment = from.x > to.x
+        val altX = if (isAlternativeInNextSegment) {
+            1 + to.x
+        } else {
+            -(1 - to.x)
+        }
+        val alternativeTo = PointF(altX, to.y)
+        return if (from.lengthTo(to) < from.lengthTo(alternativeTo)) {
+            to
+        } else {
+            alternativeTo
+        }
     }
 
     private fun calculatePath(from: PointF, to: PointF): Path =
