@@ -10,14 +10,26 @@ import com.kamer.aviasalestest.features.select.SelectCityViewModel
 import com.kamer.aviasalestest.utils.StringProvider
 
 
-object ServiceLocator {
+class ServiceLocator(
+    private val appContext: Context
+) {
 
-    private val selectedCityStorage by lazy { SelectedCityStorage() }
+    private val selectedCityStorage by lazy { SelectedCityStorage(appContext) }
 
     fun buildMainViewModel(router: MainRouter) = MainViewModel(selectedCityStorage, router)
 
-    fun buildSelectCityViewModel(context: Context, isOrigin: Boolean) = SelectCityViewModel(isOrigin, SelectCityInteractor(), SelectCityRouter(), buildStringProvider(context))
+    fun buildSelectCityViewModel(isOrigin: Boolean) =
+        SelectCityViewModel(
+            isOrigin,
+            buildSelectCityInteractor(),
+            buildSelectCityRouter(),
+            buildStringProvider()
+        )
 
-    private fun buildStringProvider(context: Context): StringProvider = StringProvider(context)
+    private fun buildSelectCityInteractor() = SelectCityInteractor(selectedCityStorage)
+
+    private fun buildSelectCityRouter() = SelectCityRouter()
+
+    private fun buildStringProvider(): StringProvider = StringProvider(appContext)
 
 }

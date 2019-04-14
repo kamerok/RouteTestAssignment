@@ -5,16 +5,16 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.kamer.aviasalestest.features.progress.ProgressActivity
 import com.kamer.aviasalestest.R
-import com.kamer.aviasalestest.dependency.ServiceLocator
 import com.kamer.aviasalestest.features.select.SelectCityActivity
 import com.kamer.aviasalestest.model.City
 import com.kamer.aviasalestest.utils.setupRx
+import com.kamer.aviasalestest.app.App
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), MainRouter {
 
-    private val viewModel: MainViewModel by lazy { ServiceLocator.buildMainViewModel(this) }
+    private val viewModel: MainViewModel by lazy { App.serviceLocator.buildMainViewModel(this) }
 
     init {
         setupRx { compositeDisposable ->

@@ -9,7 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import com.kamer.aviasalestest.R
-import com.kamer.aviasalestest.dependency.ServiceLocator
+import com.kamer.aviasalestest.app.App
 import com.kamer.aviasalestest.utils.setupRx
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_select_city.*
@@ -28,10 +28,7 @@ class SelectCityActivity : AppCompatActivity(), TextWatcher {
     }
 
     private val viewModel: SelectCityViewModel by lazy {
-        ServiceLocator.buildSelectCityViewModel(
-            this,
-            intent.getBooleanExtra(EXTRA_IS_ORIGIN, true)
-        )
+        App.serviceLocator.buildSelectCityViewModel(intent.getBooleanExtra(EXTRA_IS_ORIGIN, true))
     }
     private val adapter: SelectCityAdapter by lazy {
         SelectCityAdapter { city -> viewModel.postEvent(CitySelected(city)) }
