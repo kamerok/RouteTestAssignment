@@ -46,6 +46,7 @@ class SelectCityViewModel(
         inputStream.compose(inputTransformer)
             .scan(initialState()) { previous, action -> reduce(previous, action) }
             .distinctUntilChanged()
+            //normally this stream disposing in ViewModel.onDestroy
             .replay(1)
             .autoConnect()
     }
