@@ -1,6 +1,7 @@
 package com.kamer.aviasalestest.dependency
 
 import android.content.Context
+import com.google.gson.Gson
 import com.kamer.aviasalestest.data.SelectedCityStorage
 import com.kamer.aviasalestest.features.main.MainRouter
 import com.kamer.aviasalestest.features.main.MainViewModel
@@ -14,7 +15,9 @@ class ServiceLocator(
     private val appContext: Context
 ) {
 
-    private val selectedCityStorage by lazy { SelectedCityStorage(appContext) }
+    private val selectedCityStorage: SelectedCityStorage by lazy { SelectedCityStorage(appContext, gson) }
+
+    private val gson: Gson by lazy { Gson() }
 
     fun buildMainViewModel(router: MainRouter) = MainViewModel(selectedCityStorage, router)
 

@@ -15,8 +15,8 @@ class SelectCityInteractor(private val storage: SelectedCityStorage) {
             .just(
                 listOf(
                     City(0, "Sydney", "SYD", -34.0, 151.0),
-                    City(1, "Москва", "MOW", 55.752041, 37.617508),
-                    City(2, "Нью-Йорк", "NYC", 40.75603, -73.986956)
+                    City(12153, "Москва", "MOW", 55.752041, 37.617508),
+                    City(20857, "Нью-Йорк", "NYC", 40.75603, -73.986956)
                 )
             )
             .subscribeOn(Schedulers.io())
