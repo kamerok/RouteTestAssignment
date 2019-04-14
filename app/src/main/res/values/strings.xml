@@ -5,7 +5,7 @@
 
     <string name="select_title_origin">Откуда</string>
     <string name="select_title_destination">Куда</string>
-    <string name="select_empty">Введите текст, чтобы начать поиск</string>
+    <string name="select_prompt">Введите текст, чтобы начать поиск</string>
     <string name="select_error">Не получилось выполнить поиск, проверьте соединение с интернетом</string>
     <string name="select_nothing_found">Ничего не нашлось, измените запрос</string>
 </resources>

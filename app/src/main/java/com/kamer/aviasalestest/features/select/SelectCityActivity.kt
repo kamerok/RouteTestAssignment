@@ -56,7 +56,7 @@ class SelectCityActivity : AppCompatActivity() {
 
     private fun updateViews(state: SelectCityUiModel) {
         queryView.hint = state.hint
-        queryView.setText(state.query)
+//        queryView.setText(state.query)
         adapter.setData(state.items)
     }
 
