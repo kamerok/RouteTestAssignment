@@ -4,13 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".features.main.MainActivity">
 
     <View
         android:id="@+id/originView"
         android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:background="?selectableItemBackground"
+        android:layout_height="@dimen/item_height"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/selector_top"
         app:layout_constraintBottom_toTopOf="@id/destinationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,17 +22,25 @@
 
     <TextView
         android:id="@+id/originNameView"
-        android:layout_width="wrap_content"
+        style="@style/Text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="@id/originView"
+        app:layout_constraintEnd_toStartOf="@id/originIataView"
         app:layout_constraintStart_toStartOf="@id/originView"
         app:layout_constraintTop_toTopOf="@id/originView"
         tools:text="Moscow" />
 
     <TextView
         android:id="@+id/originIataView"
+        style="@style/Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@id/originView"
         app:layout_constraintEnd_toEndOf="@id/originView"
         app:layout_constraintTop_toTopOf="@id/originView"
@@ -38,8 +49,11 @@
     <View
         android:id="@+id/destinationView"
         android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:background="?selectableItemBackground"
+        android:layout_height="@dimen/item_height"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/selector_top"
+        android:rotation="180"
         app:layout_constraintBottom_toTopOf="@id/searchView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,31 +61,51 @@
 
     <TextView
         android:id="@+id/destinationNameView"
-        android:layout_width="wrap_content"
+        style="@style/Text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="@id/destinationView"
+        app:layout_constraintEnd_toStartOf="@id/destinationIataView"
         app:layout_constraintStart_toStartOf="@id/destinationView"
         app:layout_constraintTop_toTopOf="@id/destinationView"
         tools:text="Moscow" />
 
     <TextView
         android:id="@+id/destinationIataView"
+        style="@style/Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@id/destinationView"
         app:layout_constraintEnd_toEndOf="@id/destinationView"
         app:layout_constraintTop_toTopOf="@id/destinationView"
         tools:text="MOW" />
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1px"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="@id/originView"
+        app:layout_constraintStart_toStartOf="@id/originView"
+        app:layout_constraintTop_toBottomOf="@id/originView" />
+
     <Button
         android:id="@+id/searchView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:backgroundTint="@color/colorAccent"
         android:text="@string/main_search"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/destinationView"
+        app:layout_constraintStart_toStartOf="@id/destinationView"
         app:layout_constraintTop_toBottomOf="@id/destinationView" />
 
 </android.support.constraint.ConstraintLayout>

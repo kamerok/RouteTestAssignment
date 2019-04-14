@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.*
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -42,7 +43,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
             }
     }
 
-    private val pathColor: Int = Color.BLUE
+    private val pathColor: Int by lazy { ContextCompat.getColor(this, R.color.colorPrimary) }
 
     private val markerTextSize by lazy { resources.getDimension(R.dimen.marker_text) }
     private val markerVerticalPadding by lazy { resources.getDimension(R.dimen.marker_vertical_padding) }
